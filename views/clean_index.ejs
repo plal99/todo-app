@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo List</title>
+</head>
+
+<body>
+
+  <h1><%= today %></h1>
+
+  <!-- New Task Form -->
+  <form action="/" method="POST">
+    <input type="text" name="newTask" placeholder="Add new task..." required>
+    <button type="submit">Add</button>
+  </form>
+
+  <% const incompleteTasks = tasks.filter(t => !t.completed); %>
+  <% const completedTasks = tasks.filter(t => t.completed); %>
+
+  <h2>Incomplete Tasks</h2>
+  <% incompleteTasks.forEach(task => { %>
+    <div>
+
+      <form action="/toggle" method="post" style="display: inline;">
+        <input type="hidden" name="id" value="<%= task._id %>">
+        <input type="checkbox" onchange="this.form.submit()">
+      </form>
+
+      <span><%= task.name %></span>
+
+      <form action="/delete" method="post" style="display: inline;">
+        <input type="hidden" name="id" value="<%= task._id %>">
+        <button type="submit">Delete</button>
+      </form>
+
+      <form action="/edit" method="post" style="display: inline;">
+        <input type="hidden" name="id" value="<%= task._id %>">
+        <input type="text" name="updatedTask" placeholder="Edit task...">
+        <button type="submit">Update</button>
+      </form>
+
+    </div>
+  <% }); %>
+
+  <h2>Completed Tasks</h2>
+  <% completedTasks.forEach(task => { %>
+    <div>
+
+      <form action="/toggle" method="post" style="display: inline;">
+        <input type="hidden" name="id" value="<%= task._id %>">
+        <input type="checkbox" onchange="this.form.submit()" checked>
+      </form>
+
+      <span style="text-decoration: line-through;"><%= task.name %></span>
+
+      <form action="/delete" method="post" style="display: inline;">
+        <input type="hidden" name="id" value="<%= task._id %>">
+        <button type="submit">Delete</button>
+      </form>
+
+    </div>
+  <% }); %>
+
+  <% if(tasks.length === 0) { %>
+    <p>No tasks added yet.</p>
+  <% } %>
+
+</body>
+</html>

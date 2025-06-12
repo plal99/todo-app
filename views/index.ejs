@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo List</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@tailwindcss/forms"></script>
+</head>
+<body class="bg-gradient-to-r from-indigo-900 to-blue-900 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-lg">
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">
+      <%= today %>
+    </h1>
+
+    <!-- New Task Form -->
+    <form action="/" method="POST" class="flex mb-6">
+      <input type="text" name="newTask" placeholder="Add new task..." required
+        class="flex-grow px-4 py-3 rounded-l-lg border border-gray-300 focus:ring-indigo-500 text-lg">
+      <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 rounded-r-lg font-bold text-xl">+</button>
+    </form>
+
+    <% const incompleteTasks = tasks.filter(t => !t.completed); %>
+    <% const completedTasks = tasks.filter(t => t.completed); %>
+
+    <!-- Incomplete Tasks -->
+    <% incompleteTasks.forEach(task => { %>
+      <div class="flex flex-col bg-gray-100 rounded-lg p-4 mb-4 shadow">
+
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <form action="/toggle" method="post">
+              <input type="hidden" name="id" value="<%= task._id %>">
+              <input type="checkbox" onchange="this.form.submit()" class="w-5 h-5 text-indigo-500">
+            </form>
+            <p class="text-lg font-medium text-gray-800"><%= task.name %></p>
+          </div>
+
+          <form action="/delete" method="post">
+            <input type="hidden" name="id" value="<%= task._id %>">
+            <button type="submit" class="text-red-500 hover:text-red-700 text-xl">&times;</button>
+          </form>
+        </div>
+
+        <!-- Edit Form -->
+        <form action="/edit" method="post" class="flex items-center gap-2 mt-3">
+          <input type="hidden" name="id" value="<%= task._id %>">
+          <input type="text" name="updatedTask" placeholder="Edit..." 
+            class="flex-grow px-3 py-2 border rounded focus:ring-indigo-500">
+          <button type="submit" class="bg-yellow-500 text-white px-3 py-2 rounded hover:bg-yellow-600">Update</button>
+        </form>
+      </div>
+    <% }); %>
+
+    <!-- Completed Tasks -->
+    <% completedTasks.forEach(task => { %>
+      <div class="flex justify-between items-center bg-green-100 rounded-lg p-4 mb-3 shadow">
+        <div class="flex items-center gap-3">
+          <form action="/toggle" method="post">
+            <input type="hidden" name="id" value="<%= task._id %>">
+            <input type="checkbox" onchange="this.form.submit()" checked class="w-5 h-5 text-green-500">
+          </form>
+          <p class="text-lg font-medium text-gray-500 line-through"><%= task.name %></p>
+        </div>
+
+        <form action="/delete" method="post">
+          <input type="hidden" name="id" value="<%= task._id %>">
+          <button type="submit" class="text-red-500 hover:text-red-700 text-xl">&times;</button>
+        </form>
+      </div>
+    <% }); %>
+
+    <% if(tasks.length === 0) { %>
+      <p class="text-center text-gray-400">No tasks added yet.</p>
+    <% } %>
+
+  </div>
+
+</body>
+</html>
