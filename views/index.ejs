@@ -45,7 +45,7 @@
         <!-- Edit Form -->
         <form action="/edit" method="post" class="flex items-center gap-2 mt-3">
           <input type="hidden" name="id" value="<%= task._id %>">
-          <input type="text" name="updatedTask" placeholder="Edit..." 
+          <input type="text" name="updatedTask" placeholder="Edit..." required
             class="flex-grow px-3 py-2 border rounded focus:ring-indigo-500">
           <button type="submit" class="bg-yellow-500 text-white px-3 py-2 rounded hover:bg-yellow-600">Update</button>
         </form>
